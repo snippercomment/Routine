@@ -40,6 +40,7 @@ router.post("/",async(req,res)=>{
                     name:product.name,
                     image: product.images[0].url,
                     price: product.price,
+                    discountPrice: product.discountPrice,
                     size,
                         color,
                         quantity
@@ -97,10 +98,14 @@ router.put("/",async(req,res)=>{
             } else{
                 cart.products.splice(productIndex, 1);
             }
-            cart.totalPrice = cart.products.reduce( 
-                (acc,item) => acc + item.price * item.quantity,
+            cart.totalPrice = cart.products.reduce(
+                (acc, item) => {
+                  const price = item.discountPrice ?? item.price;
+                  return acc + price * item.quantity;
+                },
                 0
-            );
+              );
+                        
             await cart.save();
             return res.status(200).json(cart);
         }

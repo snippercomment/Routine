@@ -6,31 +6,31 @@ import { createCheckout } from '../../redux/slices/checkOutSlice';
 import axios from 'axios';
 
 
-const cart ={
-    products:[
-        {
-            productId : 1,
-            name: "T-shirt",
-            size: "M",
-            color: "Red",
+// const cart ={
+//     products:[
+//         {
+//             productId : 1,
+//             name: "T-shirt",
+//             size: "M",
+//             color: "Red",
            
-            price:150000,
-            image:"https://picsum.photos/200?ramdom=1"
-        },
-        {
-            productId : 2,
-            name: "TS-shirt",
-            size: "S",
-            color: "Blue",
+//             price:150000,
+//             image:"https://picsum.photos/200?ramdom=1"
+//         },
+//         {
+//             productId : 2,
+//             name: "TS-shirt",
+//             size: "S",
+//             color: "Blue",
             
-            price:160000,
-            image:"https://picsum.photos/200?ramdom=2"
-        },
+//             price:160000,
+//             image:"https://picsum.photos/200?ramdom=2"
+//         },
 
 
-    ],
-    totalPrice: 310000,
-}
+//     ],
+//     totalPrice: 310000,
+// }
 const CheckOut = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -218,26 +218,33 @@ const CheckOut = () => {
                             
                         </div>
                         <p className='text-xl'>
-    {product.price?.toLocaleString('vi-VN')} đ
-</p>
-
-
-                        
+                                {(product.discountPrice ?? product.price)?.toLocaleString('vi-VN')} đ
+                            </p>
+      
                     </div>
                 ))}
             </div>
             <div className='flex justify-between items-center text-lg mb-4'>
-                <p>Tổng cộng</p>
-                <p>{cart.totalPrice?.toLocaleString()} đ</p>
+                <p>Giá tiền: </p>
+                <p>{cart.products.reduce((total, product) => {
+                    const price = product.discountPrice ?? product.price;
+                    return total + price * product.quantity;
+                }, 0).toLocaleString('vi-VN')} đ</p>
             </div>
+
             <div className='flex justify-between items-center text-lg'>
-                <p>Shipping</p>
-                <p>Free</p>
+                <p>Phí ship</p>
+                <p>Miễn phí</p>
             </div>
-            <div className='flex justify-between items-center text-lg mt-4 border-t pt-4'>
-                <p>Total</p>
-                <p>{cart.totalPrice?.toLocaleString()} đ</p>
+            {/*  */}
+                <div className='flex justify-between items-center text-lg mt-4 border-t pt-4'>
+                <p>Tổng :</p>
+                <p>{cart.products.reduce((total, product) => {
+                    const price = product.discountPrice ?? product.price;
+                    return total + price * product.quantity;
+                }, 0).toLocaleString('vi-VN')} đ</p>
             </div>
+
         </div>
     </div>
   )
