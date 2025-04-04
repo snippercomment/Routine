@@ -14,7 +14,8 @@ const initialState ={
     user:userFromStorage,
     guestId:initialGuestId,
     loading:false,
-    error:null
+    error:null,
+    successMessage: null,
 }
 
 export const loginUser = createAsyncThunk(
@@ -56,6 +57,7 @@ const authSlice = createSlice({
     reducers:{
         logout: (state)=>{
             state.user =null;
+            state.successMessage = null;
             state.guestId = `guest_${new Date().getTime()}`;
             localStorage.removeItem("userInfo");
             localStorage.removeItem("userToken");
@@ -72,15 +74,17 @@ const authSlice = createSlice({
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
+                state.successMessage = null;
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
-                
+                state.successMessage = "Đăng nhập thành công!";
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload.message;
+                state.successMessage = null;
             })
     
             // Register
