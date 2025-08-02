@@ -6,21 +6,25 @@ import { logout } from '../redux/slices/uathSlice';
 import { clearCart } from '../redux/slices/cartSlice';
 
 const Profile = () => {
-    const { user } = useSelector((state) => state.auth);
+    const { user, token } = useSelector((state) => state.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!user) {
+        if (!user || !token) {
             navigate("/login");
         }
-    }, [user, navigate]);
+    }, [user, token, navigate]);
 
     const handleLogout = () => {
         dispatch(logout());
         dispatch(clearCart());
         navigate("/login");
     };
+
+    if (!user || !token) {
+        return null;
+    }
 
     return (
         <div className='min-h-screen flex flex-col'>

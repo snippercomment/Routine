@@ -27,16 +27,20 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-[80vh] overflow-hidden">
+    <div className="relative w-full h-[40vh] sm:h-[60vh] md:h-[80vh] aspect-[16/9] overflow-hidden">
       <div className="relative flex w-full h-full transition-transform duration-500 ease-in-out">
         {images.map((img, index) => (
           <img
             key={index}
             src={img}
             alt={`Slide ${index}`}
-            className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${
-              index === currentIndex ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute w-full h-full 
+          object-cover 
+          sm:object-cover 
+          object-contain
+          transition-opacity duration-1000 
+          ${index === currentIndex ? "opacity-100" : "opacity-0"}
+        `}
           />
         ))}
       </div>
@@ -50,9 +54,8 @@ const Hero = () => {
         {images.map((_, index) => (
           <span
             key={index}
-            className={`block w-4 h-4 rounded-full transition-all duration-300 ${
-              index === currentIndex ? "bg-white scale-110" : "bg-gray-400"
-            }`}
+            className={`block w-4 h-4 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-white scale-110" : "bg-gray-400"
+              }`}
           />
         ))}
       </div>

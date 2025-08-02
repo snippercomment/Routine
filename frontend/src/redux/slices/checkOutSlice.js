@@ -1,48 +1,54 @@
-import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { userAxios } from "../../config/axios";
 
 export const createCheckout = createAsyncThunk(
-    "checkout/createCheckout",async(checkoutdata,{rejectWithValue})=>{
+    "checkout/createCheckout",
+    async (checkoutdata, { rejectWithValue }) => {
         try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}/api/checkout`,
-                checkoutdata,
-                {
-                    headers:{
-                        Authorization:`Bearer ${localStorage.getItem("userToken")}`,
-                    }
-                }
+            const response = await userAxios.post(
+                `/api/checkout`,
+                checkoutdata
             );
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response.data)
+            return rejectWithValue(error.response?.data || { message: 'Không thể tạo đơn hàng' });
         }
-});
+    }
+);
 
 const checkoutSlice = createSlice({
-    name:"checkout",
-    initialState:{
-        checkout:null,
-        loading:false,
-        error:null,
+    name: "checkout",
+    initialState: {
+        checkout: null,
+        loading: false,
+        error: null,
     },
-    reducers:{},
-    extraReducers:(builder)=>{
-        builder
-         .addCase(createCheckout.pending,(state)=>{
-            state.loading = true;
+    reducers: {
+        clearCheckout: (state) => {
+            state.checkout = null;
             state.error = null;
-        })
-        .addCase(createCheckout.fulfilled,(state,action)=>{
-            state.loading = false;
-            state.checkout = action.payload;
-        }) .addCase(createCheckout.rejected,(state,action)=>{
-            state.loading = false;
-            state.error = action.payload.message;
-        })
+        },
+        clearError: (state) => {
+            state.error = null;
+        }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(createCheckout.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(createCheckout.fulfilled, (state, action) => {
+                state.loading = false;
+                state.checkout = action.payload;
+                state.error = null;
+            })
+            .addCase(createCheckout.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload?.message || 'Không thể tạo đơn hàng';
+            });
     }
-})
+});
 
-export default checkoutSlice.reducer
+export const { clearCheckout, clearError } = checkoutSlice.actions;
+export default checkoutSlice.reducer;

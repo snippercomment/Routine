@@ -78,11 +78,11 @@ const Footer = () => {
                     className='hover:text-gray-500'>
                         <FaFacebook className='h-5 w-5'/>
                     </a>
-                    <a href='' target='_blank' rel="noopener noreferrer"
+                    <a href='https://www.instagram.com/minhthuan02021/' target='_blank' rel="noopener noreferrer"
                     className='hover:text-gray-500'>
                          <IoLogoInstagram className='w-5 h-5'/>
                     </a>
-                    <a href='' target='_blank' rel="noopener noreferrer"
+                    <a href='https://x.com/m61329' target='_blank' rel="noopener noreferrer"
                     className='hover:text-gray-500'>
                          <RiTwitterXLine className='w-4 h-4'/>
                     </a>

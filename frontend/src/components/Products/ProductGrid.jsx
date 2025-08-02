@@ -1,37 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const ProductGrid = ({products,loading,error}) => {
-    if(loading){
+const ProductGrid = ({ products, loading, error }) => {
+    if (loading) {
         return <p>Đang tải...</p>;
     }
-    if(error){
+    if (error) {
         return <p>Lỗi : {error}</p>
     }
-  return (
-    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'>
+    return (
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'>
             {
-                products.map((product,index)=>(
-                    <Link key={index} to={`/product/${product._id}`} className='block'>
-                        <div className='bg-white p-4 rounded-lg'>
-                            <div className='w-full h-96 mb-4'>
-                                <img src={product.images[0].url} alt={product.images[0].alText|| product.name}
-                                    className='w-full h-full object-cover rounded-lg'
-                                />
-                            </div>
-                            <h3 className='text-sm mb-2'>{product.name}</h3>
-                            <p className='text-gray-500 font-medium text-sm tracking-tighter'>
-                            {product.price
-                                ? `${product.price.toLocaleString("vi-VN")} đ`
-                                : ""}
-                        </p>
+                products.map((product, index) => {
+                    const [mainImageIdx, setMainImageIdx] = useState(0);
+                    return (
+                        <div key={index} className='block'>
+                            <Link to={`/product/${product._id}`}>
+                                <div className='bg-white p-4 rounded-lg'>
+                                    <div className='w-full h-96 mb-4 flex flex-col items-center'>
+                                        <img src={product.images[0]?.url} alt={product.images[0]?.altText || product.name}
+                                            className='w-full h-full object-cover rounded-lg'
+                                        />
+                                    </div>
+                                    <h3 className='text-sm mb-2'>{product.name}</h3>
+                                    <p className='text-gray-500 font-medium text-sm tracking-tighter'>
+                                        {product.price
+                                            ? `${product.price.toLocaleString("vi-VN")} đ`
+                                            : ""}
+                                    </p>
 
+                                </div>
+                            </Link>
                         </div>
-                    </Link>
-                ))
+                    )
+                })
             }
-    </div>
-  )
+        </div>
+    )
 }
 
 export default ProductGrid
